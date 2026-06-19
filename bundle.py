@@ -6,7 +6,7 @@ def read_file(path):
         return f.read()
 
 bundle = []
-bundle.append("-- NEVERLOSE UI LIBRARY")
+bundle.append("-- NEVERLOSE UI BUNDLED")
 bundle.append("local __modules = {}")
 bundle.append("local function __require(name)")
 bundle.append("    if type(__modules[name]) == 'function' then")
@@ -42,8 +42,13 @@ add_module("Watermark", "src/Elements/Watermark.lua")
 add_module("SaveManager", "src/SaveManager.lua")
 add_module("init", "src/init.lua")
 
-bundle.append("return __require('init')")
+bundle.append("local Library = __require('init')\n")
 
-with open("NeverloseUI.lua", "w") as f:
+demo_code = read_file("neverlose_demo.lua")
+demo_code = demo_code.replace("local Library = require(script.Parent.src)", "")
+demo_code = demo_code.replace("return Library", "")
+bundle.append(demo_code)
+
+with open("NeverloseHub_Bundled.lua", "w") as f:
     f.write('\n'.join(bundle))
-print("Library bundled successfully to NeverloseUI.lua!")
+print("Successfully generated NeverloseHub_Bundled.lua with the complete menu!")
