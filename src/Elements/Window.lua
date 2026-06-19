@@ -1,4 +1,3 @@
-local CoreGui = game:GetService("CoreGui")
 local Tab = require(script.Parent.Tab)
 
 local Window = {}
@@ -12,14 +11,23 @@ function Window.new(options, library)
     self.Tabs = {}
     self.CurrentTab = nil
     
+    local function GetContainer()
+        if gethui then return gethui() end
+        local s, cg = pcall(function() return game:GetService("CoreGui") end)
+        if s and cg then return cg end
+        return game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    end
+    
+    local container = GetContainer()
+    
     -- Cleanup previous
-    if CoreGui:FindFirstChild("NeverloseLibrary") then
-        CoreGui.NeverloseLibrary:Destroy()
+    if container:FindFirstChild("NeverloseLibrary") then
+        container.NeverloseLibrary:Destroy()
     end
     
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "NeverloseLibrary"
-    screenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
+    screenGui.Parent = container
     self.ScreenGui = screenGui
     
     local theme = self.Library.Theme

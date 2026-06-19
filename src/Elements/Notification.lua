@@ -1,4 +1,3 @@
-local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 
 local NotificationSystem = {
@@ -8,13 +7,22 @@ local NotificationSystem = {
 function NotificationSystem:Init(library)
     self.Library = library
     
-    if CoreGui:FindFirstChild("NeverloseNotifications") then
-        CoreGui.NeverloseNotifications:Destroy()
+    local function GetContainer()
+        if gethui then return gethui() end
+        local s, cg = pcall(function() return game:GetService("CoreGui") end)
+        if s and cg then return cg end
+        return game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    end
+    
+    local parentContainer = GetContainer()
+    
+    if parentContainer:FindFirstChild("NeverloseNotifications") then
+        parentContainer.NeverloseNotifications:Destroy()
     end
     
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "NeverloseNotifications"
-    screenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
+    screenGui.Parent = parentContainer
     
     local container = Instance.new("Frame")
     container.Name = "Container"

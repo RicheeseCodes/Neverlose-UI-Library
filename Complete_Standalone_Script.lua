@@ -909,7 +909,6 @@ __modules["Tab"] = function()
 end
 
 __modules["Window"] = function()
-    local CoreGui = game:GetService("CoreGui")
     local Tab = __require("Tab")
     
     local Window = {}
@@ -923,14 +922,23 @@ __modules["Window"] = function()
         self.Tabs = {}
         self.CurrentTab = nil
         
+        local function GetContainer()
+            if gethui then return gethui() end
+            local s, cg = pcall(function() return game:GetService("CoreGui") end)
+            if s and cg then return cg end
+            return game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+        end
+        
+        local container = GetContainer()
+        
         -- Cleanup previous
-        if CoreGui:FindFirstChild("NeverloseLibrary") then
-            CoreGui.NeverloseLibrary:Destroy()
+        if container:FindFirstChild("NeverloseLibrary") then
+            container.NeverloseLibrary:Destroy()
         end
         
         local screenGui = Instance.new("ScreenGui")
         screenGui.Name = "NeverloseLibrary"
-        screenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
+        screenGui.Parent = container
         self.ScreenGui = screenGui
         
         local theme = self.Library.Theme
@@ -1018,7 +1026,6 @@ __modules["Window"] = function()
 end
 
 __modules["Notification"] = function()
-    local CoreGui = game:GetService("CoreGui")
     local TweenService = game:GetService("TweenService")
     
     local NotificationSystem = {
@@ -1028,13 +1035,22 @@ __modules["Notification"] = function()
     function NotificationSystem:Init(library)
         self.Library = library
         
-        if CoreGui:FindFirstChild("NeverloseNotifications") then
-            CoreGui.NeverloseNotifications:Destroy()
+        local function GetContainer()
+            if gethui then return gethui() end
+            local s, cg = pcall(function() return game:GetService("CoreGui") end)
+            if s and cg then return cg end
+            return game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+        end
+        
+        local parentContainer = GetContainer()
+        
+        if parentContainer:FindFirstChild("NeverloseNotifications") then
+            parentContainer.NeverloseNotifications:Destroy()
         end
         
         local screenGui = Instance.new("ScreenGui")
         screenGui.Name = "NeverloseNotifications"
-        screenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
+        screenGui.Parent = parentContainer
         
         local container = Instance.new("Frame")
         container.Name = "Container"

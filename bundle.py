@@ -49,6 +49,6 @@ demo_code = demo_code.replace("local Library = require(script.Parent.src)", "")
 demo_code = demo_code.replace("return Library", "")
 bundle.append(demo_code)
 
-with open("NeverloseHub_Bundled.lua", "w") as f:
+with open("Complete_Standalone_Script.lua", "w") as f:
     f.write('\n'.join(bundle))
-print("Successfully generated NeverloseHub_Bundled.lua with the complete menu!")
+print("Successfully generated Complete_Standalone_Script.lua with the complete menu!")
